@@ -1,0 +1,26 @@
+[package]
+name = "yma-crypto"
+version.workspace = true
+edition.workspace = true
+description = "国密算法统一库 (SM2/SM3/SM4)"
+
+[dependencies]
+serde.workspace = true
+thiserror.workspace = true
+hex.workspace = true
+rand.workspace = true
+tracing.workspace = true
+parking_lot.workspace = true
+uuid.workspace = true
+
+# 国密算法标准实现
+sm2.workspace = true
+sm3.workspace = true
+smcrypto.workspace = true
+digest.workspace = true
+hmac.workspace = true
+ring.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true
+base64.workspace = true

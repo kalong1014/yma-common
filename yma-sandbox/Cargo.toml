@@ -1,0 +1,17 @@
+[package]
+name = "yma-sandbox"
+version.workspace = true
+edition.workspace = true
+description = "插件沙箱统一库 (Wasmtime WASI 隔离执行)"
+
+[dependencies]
+serde.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+
+wasmtime.workspace = true
+wasmtime-wasi.workspace = true
+
+[dev-dependencies]
+rand.workspace = true

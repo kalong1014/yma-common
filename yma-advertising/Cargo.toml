@@ -1,0 +1,14 @@
+[package]
+name = "yma-advertising"
+version.workspace = true
+edition.workspace = true
+description = "广告服务统一库"
+
+[dependencies]
+serde.workspace = true
+thiserror.workspace = true
+chrono.workspace = true
+uuid.workspace = true
+tracing.workspace = true
+rand.workspace = true
+parking_lot.workspace = true

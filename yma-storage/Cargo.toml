@@ -1,0 +1,17 @@
+[package]
+name = "yma-storage"
+version.workspace = true
+edition.workspace = true
+description = "存储抽象统一库"
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+async-trait.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+uuid.workspace = true
+chrono.workspace = true
+bytes.workspace = true
+parking_lot.workspace = true

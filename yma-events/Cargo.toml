@@ -1,0 +1,17 @@
+[package]
+name = "yma-events"
+version.workspace = true
+edition.workspace = true
+description = "事件系统统一库 (EventBus)"
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+uuid.workspace = true
+chrono.workspace = true
+parking_lot.workspace = true
+async-trait.workspace = true
+bytes.workspace = true
