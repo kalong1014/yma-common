@@ -212,38 +212,38 @@ pub fn init_logger(config: &LogConfig) -> Result<(), String> {
         .with_thread_ids(true);
 
     if let Some(ref file_path) = config.file_path {
-            // 文件日志模式
-            let path = PathBuf::from(file_path);
-            let dir = path.parent().unwrap_or(Path::new(".")).to_path_buf();
-            let prefix = path.file_stem()
-                .and_then(|s| s.to_str())
-                .unwrap_or("app")
-                .to_string();
+        // 文件日志模式
+        let path = PathBuf::from(file_path);
+        let dir = path.parent().unwrap_or(Path::new(".")).to_path_buf();
+        let prefix = path.file_stem()
+            .and_then(|s| s.to_str())
+            .unwrap_or("app")
+            .to_string();
 
-            let appender = Arc::new(RollingFileAppender::new(
-                prefix,
-                dir,
-                config.max_file_size_mb,
-                config.retention_days,
-            ));
+        let appender = Arc::new(RollingFileAppender::new(
+            prefix,
+            dir,
+            config.max_file_size_mb,
+            config.retention_days,
+        ));
 
-            if config.json_format {
-                subscriber
-                    .json()
-                    .with_writer({
-                        let appender = appender.clone();
-                        move || FileLogWriter::new(appender.clone())
-                    })
-                    .init();
-            } else {
-                subscriber
-                    .with_writer({
-                        let appender = appender.clone();
-                        move || FileLogWriter::new(appender.clone())
-                    })
-                    .init();
-            }
+        if config.json_format {
+            subscriber
+                .json()
+                .with_writer({
+                    let appender = appender.clone();
+                    move || FileLogWriter::new(appender.clone())
+                })
+                .init();
         } else {
+            subscriber
+                .with_writer({
+                    let appender = appender.clone();
+                    move || FileLogWriter::new(appender.clone())
+                })
+                .init();
+        }
+    } else {
         // 仅控制台输出
         if config.json_format {
             subscriber.json().init();

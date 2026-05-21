@@ -1,8 +1,6 @@
 use ring::pbkdf2;
 use std::num::NonZeroU32;
 
-#[allow(dead_code)]
-const HASH_SALT_LEN: usize = 16;
 const HASH_COST: u32 = 12;
 
 /// 密码哈希器
@@ -44,6 +42,8 @@ impl PasswordHasher {
 mod tests {
     use super::*;
     use ring::rand::SecureRandom;
+
+    const HASH_SALT_LEN: usize = 16;
 
     #[test]
     fn test_password_hash_verify() {

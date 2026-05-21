@@ -215,8 +215,25 @@ impl EventBus {
     }
 
     /// 订阅过滤后的事件
-    pub fn subscribe_filtered(&self, _filter: EventFilter) -> broadcast::Receiver<Event> {
-        self.tx.subscribe()
+    pub fn subscribe_filtered(&self, filter: EventFilter) -> broadcast::Receiver<Event> {
+        let (tx, rx) = broadcast::channel(256);
+        let mut inner_rx = self.tx.subscribe();
+        tokio::spawn(async move {
+            loop {
+                match inner_rx.recv().await {
+                    Ok(event) => {
+                        if filter.matches(&event) {
+                            let _ = tx.send(event);
+                        }
+                    }
+                    Err(broadcast::error::RecvError::Closed) => break,
+                    Err(broadcast::error::RecvError::Lagged(n)) => {
+                        tracing::warn!("Filtered subscriber lagged by {} events", n);
+                    }
+                }
+            }
+        });
+        rx
     }
 
     /// 注册异步 Handler

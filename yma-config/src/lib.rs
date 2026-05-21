@@ -29,7 +29,7 @@ impl ConfigFormat {
             .and_then(|e| e.to_str())?;
         match ext.to_lowercase().as_str() {
             "json" => Some(ConfigFormat::Json),
-            "yaml" | "yml" => Some(ConfigFormat::Yaml),
+            // "yaml" | "yml" => Some(ConfigFormat::Yaml), // 需要 serde_yaml 依赖才能支持
             "toml" => Some(ConfigFormat::Toml),
             "env" => Some(ConfigFormat::Env),
             _ => None,
