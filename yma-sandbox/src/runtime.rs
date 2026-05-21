@@ -86,13 +86,9 @@ impl SandboxRuntime {
         });
 
         // 获取 _start 或 main 函数
-        let func_result = if let Ok(func) = instance.get_typed_func::<(), ()>(&mut store, "_start") {
-            Some(func)
-        } else if let Ok(func) = instance.get_typed_func::<(), ()>(&mut store, "main") {
-            Some(func)
-        } else {
-            None
-        };
+        let func_result = instance.get_typed_func::<(), ()>(&mut store, "_start")
+            .ok()
+            .or_else(|| instance.get_typed_func::<(), ()>(&mut store, "main").ok());
 
         let _start = Instant::now();
         let timeout = Duration::from_secs(quota.max_execution_secs);

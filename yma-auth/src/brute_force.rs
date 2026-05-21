@@ -108,7 +108,7 @@ impl BruteForceGuard {
 
     fn remaining_attempts(&self, identifier: &str) -> u32 {
         let count = self.failure_count(identifier);
-        if count >= self.max_attempts { 0 } else { self.max_attempts - count }
+        self.max_attempts.saturating_sub(count)
     }
 
     pub fn clear_all(&self) {

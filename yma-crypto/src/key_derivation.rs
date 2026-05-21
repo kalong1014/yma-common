@@ -1,5 +1,4 @@
 use ring::pbkdf2;
-use ring::digest;
 use ring::hmac;
 
 const PBKDF2_ITERATIONS: u32 = 100_000;
@@ -24,11 +23,12 @@ impl KeyDerivation {
     }
 
     pub fn pbkdf2_verify(password: &[u8], salt: &[u8], iterations: u32, expected: &[u8]) -> bool {
-        let provided = Self::pbkdf2_sha256(password, salt, Some(iterations), Some(expected.len()));
-        hmac::verify(
-            &hmac::Key::new(hmac::HMAC_SHA256, expected),
-            &provided,
-            &provided,
+        pbkdf2::verify(
+            pbkdf2::PBKDF2_HMAC_SHA256,
+            std::num::NonZeroU32::new(iterations).expect("iterations must be > 0"),
+            salt,
+            password,
+            expected,
         ).is_ok()
     }
 
@@ -38,7 +38,7 @@ impl KeyDerivation {
         prk.as_ref().to_vec()
     }
 
-    pub fn hkdf_expand(_prk: &[u8], info: &[u8], length: usize) -> Vec<u8> {
+    pub fn hkdf_expand(prk: &[u8], info: &[u8], length: usize) -> Vec<u8> {
         let mut result = Vec::with_capacity(length);
         let mut previous: Vec<u8> = Vec::new();
         let mut counter: u8 = 1;
@@ -46,7 +46,8 @@ impl KeyDerivation {
             let mut data = previous.clone();
             data.extend_from_slice(info);
             data.push(counter);
-            let h = digest::digest(&digest::SHA256, &data);
+            let prk_key = hmac::Key::new(hmac::HMAC_SHA256, prk);
+            let h = hmac::sign(&prk_key, &data);
             let hash_bytes = h.as_ref();
             let needed = std::cmp::min(hash_bytes.len(), length - result.len());
             result.extend_from_slice(&hash_bytes[..needed]);

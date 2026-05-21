@@ -52,13 +52,12 @@ impl Sm2AeadEncryptor {
         // 这里简化处理：用临时密钥对加密一个随机密钥
         let rng = SecureRandom::new();
         let sm4_key = rng.generate_key_256()
-            .map_err(|e| CryptoError::RandomError(e))?;
+            .map_err(CryptoError::RandomError)?;
         let sm4_key_16: [u8; 16] = sm4_key[..16].try_into()
             .map_err(|_| CryptoError::InvalidKeyLength { expected: 16, actual: sm4_key.len() })?;
-
         // 3. 生成 IV
         let iv = rng.generate_key_128()
-            .map_err(|e| CryptoError::RandomError(e))?;
+            .map_err(CryptoError::RandomError)?;
 
         // 4. SM4-CBC 加密数据
         let encrypted_data = cbc_encrypt(&sm4_key_16, &iv, plaintext);

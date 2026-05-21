@@ -133,7 +133,7 @@ impl AuthService {
         password: String,
     ) -> Result<Uuid, AuthError> {
         let user = User::new(username, email, password)
-            .map_err(|e| AuthError::InternalError(e))?;
+            .map_err(AuthError::InternalError)?;
         let id = user.id;
         let mut store = self.user_store.write();
         store.add_user(user);

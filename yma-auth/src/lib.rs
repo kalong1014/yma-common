@@ -1,7 +1,7 @@
 //! yma-auth 认证授权统一库
 //!
 //! 提供 JWT/RBAC/MFA/Password/User/Permission/Role 的标准化接口
-//! 版本锁定: 0.3.1
+//! 版本锁定: 0.3.2
 
 pub mod jwt;
 pub mod rbac;

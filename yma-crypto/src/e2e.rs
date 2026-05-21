@@ -34,14 +34,8 @@ impl E2eEncryptor {
 
     pub fn new_hybrid() -> Self {
         let rng = crate::random::SecureRandom::new();
-        let key = {
-            let bytes = rng.generate_key_128().unwrap_or([0u8; 16]);
-            bytes
-        };
-        let iv = {
-            let bytes = rng.generate_key_128().unwrap_or([0u8; 16]);
-            bytes
-        };
+        let key = rng.generate_key_128().unwrap_or([0u8; 16]);
+        let iv = rng.generate_key_128().unwrap_or([0u8; 16]);
         Self {
             scheme: EncryptionScheme::HybridSm2Sm4Gcm,
             sm4_key: key,

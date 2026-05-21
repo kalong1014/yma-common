@@ -2,7 +2,7 @@
 
 YMAIStation 公共基础库
 
-**版本: 0.3.1**
+**版本: 0.3.2**
 
 ## 项目结构
 
@@ -24,9 +24,9 @@ yma-common/
 
 ```toml
 [dependencies]
-yma-crypto = { git = "https://github.com/kalong1014/yma-common.git", tag = "v0.3.1" }
-yma-auth   = { git = "https://github.com/kalong1014/yma-common.git", tag = "v0.3.1" }
-yma-sandbox = { git = "https://github.com/kalong1014/yma-common.git", tag = "v0.3.1" }
+yma-crypto = { git = "https://github.com/kalong1014/yma-common.git", tag = "v0.3.2" }
+yma-auth   = { git = "https://github.com/kalong1014/yma-common.git", tag = "v0.3.2" }
+yma-sandbox = { git = "https://github.com/kalong1014/yma-common.git", tag = "v0.3.2" }
 ```
 
 ## Crate 功能概览
@@ -66,6 +66,15 @@ yma-sandbox = { git = "https://github.com/kalong1014/yma-common.git", tag = "v0.
 | `auth_service` | 认证服务 | `AuthService`（集成所有功能） |
 
 ## 变更日志
+
+### v0.3.2 (2026-05-21)
+- **修复**: `key_derivation.rs` `pbkdf2_verify` 使用正确的 `ring::pbkdf2::verify` 常量时间比较（原代码误用 hmac::verify 传入错误参数）
+- **修复**: `key_derivation.rs` `hkdf_expand` 按 RFC 5869 改用 HMAC-SHA256（原代码错误使用裸 SHA-256 且忽略了 PRK）
+- **修复**: `sm2_aead.rs`/`auth_service.rs` 3处冗余闭包 `.map_err(|e| T(e))` → `.map_err(T)`
+- **修复**: `e2e.rs` 2处冗余 `{ let x = ...; x }` 块
+- **修复**: `brute_force.rs` 手动饱和减法改为 `saturating_sub`
+- **修复**: `runtime.rs` 手动 `if let Ok` 改为 `.ok().or_else()`
+- **兼容**: 所有公开 API 保持向后兼容
 
 ### v0.3.1 (2026-05-21)
 - **修复**: `Role::name()` 显示名重复（Level5/User 和 Level3/Guest）
