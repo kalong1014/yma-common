@@ -19,7 +19,6 @@ sm3.workspace = true
 smcrypto.workspace = true
 digest.workspace = true
 hmac.workspace = true
-sha2.workspace = true
 ring.workspace = true
 
 [dev-dependencies]

@@ -2,7 +2,7 @@
 
 YMAIStation 公共基础库
 
-**版本: 0.3.0**
+**版本: 0.3.1**
 
 ## 项目结构
 
@@ -24,9 +24,9 @@ yma-common/
 
 ```toml
 [dependencies]
-yma-crypto = { git = "https://github.com/kalong1014/yma-common.git", tag = "v0.3.0" }
-yma-auth   = { git = "https://github.com/kalong1014/yma-common.git", tag = "v0.3.0" }
-yma-sandbox = { git = "https://github.com/kalong1014/yma-common.git", tag = "v0.3.0" }
+yma-crypto = { git = "https://github.com/kalong1014/yma-common.git", tag = "v0.3.1" }
+yma-auth   = { git = "https://github.com/kalong1014/yma-common.git", tag = "v0.3.1" }
+yma-sandbox = { git = "https://github.com/kalong1014/yma-common.git", tag = "v0.3.1" }
 ```
 
 ## Crate 功能概览
@@ -67,13 +67,18 @@ yma-sandbox = { git = "https://github.com/kalong1014/yma-common.git", tag = "v0.
 
 ## 变更日志
 
+### v0.3.1 (2026-05-21)
+- **修复**: `Role::name()` 显示名重复（Level5/User 和 Level3/Guest）
+- **兼容**: 所有公开 API 保持向后兼容
+
 ### v0.3.0 (2026-05-21)
 - **新增**: yma-crypto SHA-256/SHA-512 哈希及 HMAC (`sha` 模块)
 - **新增**: yma-crypto 随机字符串生成 (`Charset` 枚举 + `generate_random_string`)
 - **新增**: yma-auth 支持动态 cost 的 `hash_password`/`verify_password` 函数
 - **修复**: yma-auth web feature 升级至 axum 0.8
 - **修复**: yma-events `subscribe_filtered` 过滤逻辑未生效
-- **清理**: 移除 yma-crypto 中 3 个空的 wrapper 存根文件
+- **修复**: 消除 `digest` crate 版本冲突（统一使用 digest 0.10，sha 模块改用 ring 实现）
+- **清理**: 移除 yma-crypto 中 3 个空的 wrapper 存根文件及冗余的 sha2 依赖
 - **兼容**: 所有公开 API 保持向后兼容
 
 ### v0.2.0
