@@ -1,97 +1,80 @@
-# YMAIStation yma-common 公共基础库
+# yma-common
 
-这是 YMAIStation 项目的公共基础库，提供核心功能模块的通用实现。
+YMAIStation 公共基础库
+
+**版本: 0.3.0**
 
 ## 项目结构
 
 ```
 yma-common/
-├── yma-crypto/       # 加密算法模块
-├── yma-auth/         # 认证与授权模块
-├── yma-sandbox/      # WASM 沙箱运行时
-├── yma-advertising/  # 广告相关功能
-├── yma-config/       # 配置管理
-├── yma-events/       # 事件系统
-├── yma-logging/      # 日志模块
+├── yma-crypto/       # 国密算法统一库 (SM2/SM3/SM4/SHA)
+├── yma-auth/         # 认证授权统一库 (JWT/RBAC/MFA/Password)
+├── yma-sandbox/      # 安全沙箱 (Wasmtime 插件隔离)
+├── yma-advertising/  # 广告投放管理
+├── yma-config/       # 配置管理 (TOML/JSON)
+├── yma-events/       # 事件总线 (EventBus)
+├── yma-logging/      # 日志工具
 └── yma-storage/      # 存储抽象层
 ```
 
-## 模块说明
+## 使用方式
 
-### yma-crypto
-提供密码学相关功能，包括：
-- SM2/SM3/SM4 国密算法实现
-- 端到端加密
-- 密钥派生与管理
-- 随机数生成
-
-### yma-auth
-认证与授权模块，包括：
-- JWT 令牌管理
-- 密码哈希与验证
-- 多因素认证 (MFA/TOTP)
-- RBAC 权限控制
-- API Key 管理
-- 会话管理
-- 暴力破解防护
-
-### yma-sandbox
-基于 Wasmtime 的 WASM 沙箱运行时：
-- 安全的代码执行环境
-- 资源配额管理
-- 运行时隔离
-
-### yma-config
-配置管理模块：
-- 统一配置加载
-- 配置热更新
-
-### yma-events
-事件系统：
-- 事件发布/订阅
-- 事件处理
-
-### yma-logging
-日志模块：
-- 基于 tracing 的日志实现
-- 结构化日志输出
-
-### yma-storage
-存储抽象层：
-- 统一存储接口
-- 多种后端支持
-
-## 技术栈
-
-- **语言**: Rust 2021 Edition
-- **构建工具**: Cargo
-- **异步运行时**: Tokio
-- **日志框架**: Tracing
-- **序列化**: Serde
-- **WASM 运行时**: Wasmtime
-
-## 快速开始
-
-### 构建项目
-
-```bash
-# 构建所有模块
-cargo build --release
-
-# 运行测试
-cargo test --all
-```
-
-### 添加依赖
-
-在 `Cargo.toml` 中添加需要的模块：
+在项目 `Cargo.toml` 中通过 git tag 锁定版本:
 
 ```toml
 [dependencies]
-yma-crypto = { path = "../yma-crypto" }
-yma-auth = { path = "../yma-auth" }
+yma-crypto = { git = "https://github.com/kalong1014/yma-common.git", tag = "v0.3.0" }
+yma-auth   = { git = "https://github.com/kalong1014/yma-common.git", tag = "v0.3.0" }
+yma-sandbox = { git = "https://github.com/kalong1014/yma-common.git", tag = "v0.3.0" }
 ```
 
-## 许可证
+## Crate 功能概览
 
-MIT License
+### yma-crypto
+
+| 模块 | 功能 | 说明 |
+|------|------|------|
+| `sm2` | SM2 密钥生成/签名/验签/加解密 | 国密非对称算法 |
+| `sm3` | SM3 哈希/HMAC | 国密哈希算法 |
+| `sm4` | SM4 对称加解密 (ECB/CBC/GCM) | 国密对称算法 |
+| `sha` | SHA-256/SHA-512 哈希及 HMAC | 通用哈希算法 |
+| `sm2_aead` | SM2 + SM4 混合加密 | 端到端加密 |
+| `random` | 安全随机数生成 | `RandomGenerator`, `SecureRandom`, `Charset`, `generate_random_string` |
+| `key_hierarchy` | 密钥层级管理 | `KeyManager` |
+| `key_derivation` | 密钥派生 | `KeyDerivation` |
+| `key_pool` | 密钥池 | `KeyPool` |
+| `e2e` | 端到端加密器 | `E2eEncryptor` |
+
+### yma-auth
+
+| 模块 | 功能 | 说明 |
+|------|------|------|
+| `password` | 密码哈希/验证 | `PasswordHasher`, `hash_password`(支持动态cost), `verify_password` |
+| `jwt` | JWT 令牌管理 | `JwtService`（支持自定义TTL） |
+| `rbac` | RBAC 权限控制 | `RbacEngine` |
+| `mfa` | 多因素认证 | `MfaService` |
+| `totp` | TOTP 验证 | `TotpService` |
+| `session` | 会话管理 | `SessionStore` |
+| `sso` | 第三方登录 (OAuth/OIDC) | `SsoManager` |
+| `user` | 用户管理 | `User`, `UserStore` |
+| `permission` | 权限管理 | `Permission`, `PermissionStore` |
+| `role` | 角色管理 | `Role`, `RoleStore` |
+| `api_key` | API 密钥 | `ApiKeyGenerator`, `ApiKeyStore` |
+| `brute_force` | 暴力破解防护 | `BruteForceGuard` |
+| `challenge` | 挑战验证 | `ChallengeManager` |
+| `auth_service` | 认证服务 | `AuthService`（集成所有功能） |
+
+## 变更日志
+
+### v0.3.0 (2026-05-21)
+- **新增**: yma-crypto SHA-256/SHA-512 哈希及 HMAC (`sha` 模块)
+- **新增**: yma-crypto 随机字符串生成 (`Charset` 枚举 + `generate_random_string`)
+- **新增**: yma-auth 支持动态 cost 的 `hash_password`/`verify_password` 函数
+- **修复**: yma-auth web feature 升级至 axum 0.8
+- **修复**: yma-events `subscribe_filtered` 过滤逻辑未生效
+- **清理**: 移除 yma-crypto 中 3 个空的 wrapper 存根文件
+- **兼容**: 所有公开 API 保持向后兼容
+
+### v0.2.0
+- 初始稳定版本

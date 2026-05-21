@@ -7,14 +7,14 @@ const HASH_COST: u32 = 12;
 pub struct PasswordHasher;
 
 impl PasswordHasher {
-    /// 哈希密码（使用 bcrypt 算法）
+    /// 哈希密码（使用默认 cost）
     pub fn hash(password: &str) -> Result<String, String> {
         bcrypt::hash(password, HASH_COST).map_err(|e| format!("Password hash failed: {}", e))
     }
 
     /// 验证密码
-    pub fn verify(password: &str, hash: &str) -> Result<bool, String> {
-        bcrypt::verify(password, hash).map_err(|e| format!("Password verify failed: {}", e))
+    pub fn verify(password: &str, hashed: &str) -> Result<bool, String> {
+        bcrypt::verify(password, hashed).map_err(|e| format!("Password verify failed: {}", e))
     }
 
     /// 使用 PBKDF2-SHA256 哈希密码
@@ -33,9 +33,18 @@ impl PasswordHasher {
     /// 验证 PBKDF2 密码
     pub fn verify_pbkdf2(password: &str, salt: &[u8], expected: &[u8]) -> bool {
         let computed = Self::hash_pbkdf2(password, salt);
-        // 常量时间比较
         computed.len() == expected.len() && computed.iter().zip(expected.iter()).all(|(a, b)| a == b)
     }
+}
+
+/// 哈希密码（支持自定义 cost）
+pub fn hash_password(password: &str, cost: u32) -> Result<String, String> {
+    bcrypt::hash(password, cost).map_err(|e| format!("Password hash failed: {}", e))
+}
+
+/// 验证密码
+pub fn verify_password(password: &str, hashed: &str) -> Result<bool, String> {
+    bcrypt::verify(password, hashed).map_err(|e| format!("Password verify failed: {}", e))
 }
 
 #[cfg(test)]

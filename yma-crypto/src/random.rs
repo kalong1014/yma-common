@@ -68,6 +68,40 @@ pub fn generate_random_bytes(len: usize) -> Vec<u8> {
     RandomGenerator::new().generate_bytes(len).expect("Random generation failed")
 }
 
+/// 字符集枚举
+#[derive(Debug, Clone, Copy)]
+pub enum Charset {
+    /// 字母+数字
+    Alphanumeric,
+    /// 纯数字
+    Numeric,
+    /// 可打印ASCII（0x20-0x7E）
+    Ascii,
+    /// 纯字母
+    Alpha,
+}
+
+/// 生成指定长度的随机字符串
+pub fn generate_random_string(length: usize, charset: Charset) -> String {
+    use rand::Rng;
+    let chars: Vec<char> = match charset {
+        Charset::Alphanumeric => {
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+                .chars().collect()
+        }
+        Charset::Numeric => "0123456789".chars().collect(),
+        Charset::Ascii => (0x20u8..0x7F)
+            .filter_map(|c| char::from_u32(c as u32))
+            .collect(),
+        Charset::Alpha => "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            .chars().collect(),
+    };
+    let mut rng = rand::thread_rng();
+    (0..length)
+        .map(|_| chars[rng.gen_range(0..chars.len())])
+        .collect()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
