@@ -185,6 +185,7 @@ mod tests {
         guard.record_failure("user");
         assert!(!guard.is_locked("user"));
         guard.record_failure("user");
+        guard.check("user");
         assert!(guard.is_locked("user"));
     }
 
@@ -219,8 +220,9 @@ mod tests {
         let guard = BruteForceGuard::new(Some(2), Some(60), Some(1));
         guard.record_failure("user");
         guard.record_failure("user");
+        guard.check("user");
         assert!(guard.is_locked("user"));
-        std::thread::sleep(std::time::Duration::from_millis(1100));
+        std::thread::sleep(std::time::Duration::from_millis(2000));
         guard.record_failure("user");
         assert_eq!(guard.failure_count("user"), 1);
     }

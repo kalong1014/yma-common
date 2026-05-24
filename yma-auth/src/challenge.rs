@@ -224,7 +224,7 @@ mod tests {
     #[test]
     fn test_max_challenges() {
         let mgr = ChallengeManager::new();
-        for i in 0..5 {
+        for _i in 0..5 {
             mgr.generate_hashcash("user_8", 1).unwrap();
         }
         let result = mgr.generate_hashcash("user_8", 1);

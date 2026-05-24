@@ -243,10 +243,10 @@ mod tests {
     #[test]
     fn test_find_or_create_sso_user() {
         let mut store = UserStore::new();
-        let user = store.find_or_create_sso_user("sso@example.com", "sso_user");
-        assert!(user.is_some());
+        let user = store.find_or_create_sso_user("sso@example.com", "sso_user").unwrap();
+        let user_id = user.id;
 
-        let user2 = store.find_or_create_sso_user("sso@example.com", "sso_user");
-        assert_eq!(user.unwrap().id, user2.unwrap().id);
+        let user2 = store.find_or_create_sso_user("sso@example.com", "sso_user").unwrap();
+        assert_eq!(user_id, user2.id);
     }
 }

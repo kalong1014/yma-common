@@ -344,8 +344,8 @@ mod tests {
         assert!(store.get_role_by_code("test").is_some());
 
         // 系统角色不可删除
-        let admin = store.get_role_by_code("admin").unwrap();
-        assert!(!store.remove_role(&admin.id));
+        let admin_id = store.get_role_by_code("admin").unwrap().id;
+        assert!(!store.remove_role(&admin_id));
 
         // 自定义角色可删除
         assert!(store.remove_role(&id));

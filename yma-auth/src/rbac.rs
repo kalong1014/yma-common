@@ -89,10 +89,13 @@ impl RbacEngine {
         }
     }
 
-    /// 检查权限
+    /// 检查权限（支持 `*` 通配符匹配）
     pub fn check_permission(&self, user_id: &str, resource: &str, action: &str) -> bool {
         let permissions = self.list_permissions(user_id);
-        permissions.iter().any(|p| p.resource == resource && p.action == action)
+        permissions.iter().any(|p| {
+            (p.resource == "*" || p.resource == resource) &&
+            (p.action == "*" || p.action == action)
+        })
     }
 }
 

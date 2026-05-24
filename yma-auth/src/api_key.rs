@@ -40,7 +40,7 @@ mod tests {
         let (key_id, api_key) = ApiKeyGenerator::generate();
         assert!(!key_id.is_empty());
         assert!(api_key.starts_with("yma_"));
-        assert_eq!(api_key.len(), 35);
+        assert_eq!(api_key.len(), 37);
     }
 
     #[test]

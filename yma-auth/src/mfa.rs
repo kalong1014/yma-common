@@ -129,8 +129,10 @@ mod tests {
     fn test_mfa_backup_code() {
         let mfa = MfaService::new();
         mfa.enable_totp("user_5").unwrap();
-        let config = mfa.configs.read().get("user_5").unwrap().clone();
-        let code = config.backup_codes[0].clone();
+        let code = {
+            let binding = mfa.configs.read();
+            binding.get("user_5").unwrap().backup_codes[0].clone()
+        };
         assert!(mfa.verify_backup_code("user_5", &code));
         assert!(!mfa.verify_backup_code("user_5", &code));
     }

@@ -24,9 +24,9 @@ yma-common/
 
 ```toml
 [dependencies]
-yma-crypto = { git = "https://github.com/kalong1014/yma-common.git", tag = "v0.3.2" }
-yma-auth   = { git = "https://github.com/kalong1014/yma-common.git", tag = "v0.3.2" }
-yma-sandbox = { git = "https://github.com/kalong1014/yma-common.git", tag = "v0.3.2" }
+yma-crypto = { git = "https://github.com/kalong1014/yma-common.git", tag = "v0.3.3" }
+yma-auth   = { git = "https://github.com/kalong1014/yma-common.git", tag = "v0.3.3" }
+yma-sandbox = { git = "https://github.com/kalong1014/yma-common.git", tag = "v0.3.3" }
 ```
 
 ## Crate 功能概览
@@ -66,6 +66,15 @@ yma-sandbox = { git = "https://github.com/kalong1014/yma-common.git", tag = "v0.
 | `auth_service` | 认证服务 | `AuthService`（集成所有功能） |
 
 ## 变更日志
+
+### v0.3.3 (2026-05-22)
+- **修复**: `api_key.rs` API Key 预期长度从35修正为37（格式 `yma_{8}_{24}` 实际长度37）
+- **修复**: `brute_force.rs` 测试 `is_locked`/`window_expiry` 需先调用 `check()` 触发锁定（`record_failure` 不自动设置 `locked_until`）
+- **修复**: `rbac.rs` `check_permission` 添加 `*` 通配符匹配支持（`*:*` 权限应匹配任意资源/操作）
+- **修复**: `session.rs` `test_session_max_per_user` 50个会话全部分配给同一用户以正确触发限制
+- **修复**: `mfa.rs` 测试读锁持有导致 `verify_backup_code` 写锁死锁
+- **修复**: `user.rs`/`role.rs`/`sso.rs` 测试4处借用检查编译错误
+- **兼容**: 所有公开 API 保持向后兼容
 
 ### v0.3.2 (2026-05-21)
 - **修复**: `key_derivation.rs` `pbkdf2_verify` 使用正确的 `ring::pbkdf2::verify` 常量时间比较（原代码误用 hmac::verify 传入错误参数）

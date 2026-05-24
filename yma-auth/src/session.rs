@@ -229,8 +229,8 @@ mod tests {
     #[test]
     fn test_session_max_per_user() {
         let store = SessionStore::new();
-        for i in 0..50 {
-            store.create_session(&format!("user_{}", i % 2), None).unwrap();
+        for _ in 0..MAX_SESSIONS_PER_USER {
+            store.create_session("user_0", None).unwrap();
         }
         let result = store.create_session("user_0", None);
         assert!(result.is_err());

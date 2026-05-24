@@ -243,9 +243,10 @@ mod tests {
     fn test_cleanup_expired_states() {
         let mut manager = SsoManager::new();
         let provider = create_test_provider();
+        let provider_id = provider.id;
         manager.register_provider(provider);
 
-        manager.generate_auth_url(&provider.id, "http://localhost/callback");
+        manager.generate_auth_url(&provider_id, "http://localhost/callback");
         assert_eq!(manager.states.len(), 1);
 
         // 手动设置过期
