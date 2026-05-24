@@ -1,4 +1,4 @@
-use digest::{Digest, Mac};
+use digest::Digest;
 pub use sm3::Sm3;
 
 /// SM3 哈希器类型
@@ -42,9 +42,10 @@ pub fn hash_hex(data: &[u8]) -> String {
 }
 
 pub fn hmac(key: &[u8], data: &[u8]) -> Vec<u8> {
+    use hmac::{Hmac, Mac};
     use digest::KeyInit;
-    use hmac::SimpleHmac;
-    let mut mac = SimpleHmac::<Sm3>::new_from_slice(key).expect("HMAC can take key of any size");
+    type HmacSm3 = Hmac<Sm3>;
+    let mut mac = HmacSm3::new_from_slice(key).expect("HMAC can take key of any size");
     mac.update(data);
     mac.finalize().into_bytes().as_slice().to_vec()
 }

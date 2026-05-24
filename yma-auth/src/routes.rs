@@ -8,7 +8,7 @@ use axum::{
     extract::State,
     http::StatusCode,
     response::{IntoResponse, Response},
-    routing::{get, post},
+    routing::post,
     Json, Router,
 };
 use parking_lot::RwLock;
@@ -16,7 +16,6 @@ use serde::{Deserialize, Serialize};
 use serde_json::json;
 use uuid::Uuid;
 
-use crate::auth_service::AuthService;
 use crate::jwt::JwtService;
 use crate::user::UserStore;
 

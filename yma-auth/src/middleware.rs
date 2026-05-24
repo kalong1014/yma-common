@@ -5,18 +5,15 @@
 
 use std::sync::Arc;
 use axum::{
-    body::Body,
     extract::{Request, State},
     http::StatusCode,
     middleware::Next,
     response::{IntoResponse, Response},
     Json,
 };
-use serde::{Deserialize, Serialize};
 use serde_json::json;
 use uuid::Uuid;
 
-use crate::api_key::ApiKeyGenerator;
 use crate::jwt::{Claims, JwtService};
 
 /// 认证提供者枚举

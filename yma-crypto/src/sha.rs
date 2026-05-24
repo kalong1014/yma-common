@@ -2,12 +2,16 @@ use ring::digest::{SHA256, SHA512, Context};
 
 /// SHA-256 哈希
 pub fn sha256(data: &str) -> String {
-    hex::encode(Context::new(&SHA256).update(data.as_bytes()).finish().as_ref())
+    let mut ctx = Context::new(&SHA256);
+    ctx.update(data.as_bytes());
+    hex::encode(ctx.finish().as_ref())
 }
 
 /// SHA-512 哈希
 pub fn sha512(data: &str) -> String {
-    hex::encode(Context::new(&SHA512).update(data.as_bytes()).finish().as_ref())
+    let mut ctx = Context::new(&SHA512);
+    ctx.update(data.as_bytes());
+    hex::encode(ctx.finish().as_ref())
 }
 
 /// HMAC-SHA256
