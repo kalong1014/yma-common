@@ -11,6 +11,7 @@ use axum::{
     response::{IntoResponse, Response},
     Json,
 };
+use serde::Serialize;
 use serde_json::json;
 use uuid::Uuid;
 

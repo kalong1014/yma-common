@@ -178,7 +178,8 @@ mod tests {
         let pub_bytes = key_pair.public_key_bytes().to_vec();
         let restored = Sm2KeyPair::from_private_key(&priv_bytes).unwrap();
         assert_eq!(restored.private_key_bytes(), priv_bytes);
-        assert_eq!(restored.public_key_bytes().len(), 65);
+        assert_eq!(restored.public_key_bytes(), pub_bytes);
+        assert_eq!(pub_bytes.len(), 65);
         let message = b"test message";
         let signature = restored.sign(message);
         assert!(restored.verify(message, &signature));

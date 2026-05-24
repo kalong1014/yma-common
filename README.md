@@ -67,6 +67,14 @@ yma-sandbox = { git = "https://github.com/kalong1014/yma-common.git", tag = "v0.
 
 ## 变更日志
 
+### v0.3.4 (2026-05-22)
+- **修复**: yma-crypto `digest` 版本升级至 0.11（统一 sm3/hmac 依赖），修复 SM3 HMAC `KeyInit` trait 未导入
+- **修复**: yma-crypto `sh256`/`sha512` 链式调用编译错误（`Context::new(&SHA256)` 返回 `Context<Sha256>`，不可链式调用 `finish()` 后调用 `update()`）
+- **修复**: yma-auth `middleware.rs` 缺失 `serde::Serialize` 导入导致 `AuthErrorResponse` derive 失败
+- **修复**: yma-crypto `sm2.rs` 测试中 `pub_bytes` 未使用变量
+- **修复**: yma-auth `middleware.rs` / `routes.rs` 移除未使用的导入
+- **兼容**: 所有公开 API 保持向后兼容
+
 ### v0.3.3 (2026-05-22)
 - **修复**: `api_key.rs` API Key 预期长度从35修正为37（格式 `yma_{8}_{24}` 实际长度37）
 - **修复**: `brute_force.rs` 测试 `is_locked`/`window_expiry` 需先调用 `check()` 触发锁定（`record_failure` 不自动设置 `locked_until`）
