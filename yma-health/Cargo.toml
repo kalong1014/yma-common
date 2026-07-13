@@ -1,0 +1,21 @@
+[package]
+name = "yma-health"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "健康检查端点，提供Database/Redis等检查项和/health HTTP端点"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tokio = { version = "1.52.1", features = ["rt-multi-thread", "sync", "time"] }
+chrono = { version = "0.4.38", features = ["serde"] }
+axum = { version = "0.8.9", features = ["macros"] }
+async-trait = "0.1"
+sqlx = { workspace = true, optional = true }
+redis = { version = "1.0", features = ["tokio-comp", "connection-manager"], optional = true }
+
+[features]
+default = []
+db = ["sqlx"]
+redis-check = ["redis"]

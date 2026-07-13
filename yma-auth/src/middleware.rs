@@ -263,7 +263,7 @@ mod tests {
 
     #[test]
     fn test_auth_context_public_paths() {
-        let jwt = JwtService::new(b"test");
+        let jwt = JwtService::new(b"this_is_a_very_long_test_secret_for_jwt_service_32_bytes").unwrap();
         let ctx = AuthContext::new(jwt);
 
         assert!(ctx.is_public_path("/api/v1/auth/login"));

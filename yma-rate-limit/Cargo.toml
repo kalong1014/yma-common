@@ -1,0 +1,21 @@
+[package]
+name = "yma-rate-limit"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "限流模块，支持内存和Redis存储后端，按IP/端点自定义规则限流"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tokio = { version = "1.52.1", features = ["rt-multi-thread", "sync", "time"] }
+parking_lot = "0.12"
+dashmap = { version = "6", optional = true }
+redis = { version = "1.0", features = ["tokio-comp", "connection-manager"], optional = true }
+axum = { version = "0.8.9", features = ["macros"], optional = true }
+
+[features]
+default = ["memory"]
+memory = ["dashmap"]
+redis-store = ["redis"]
+axum-middleware = ["axum"]

@@ -1,0 +1,18 @@
+[package]
+name = "yma-upload"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "文件上传处理模块，支持文件类型验证、大小限制、图片缩略图生成"
+
+[dependencies]
+tokio = { version = "1.52.1", features = ["rt-multi-thread", "fs", "io-util"] }
+serde = { version = "1.0", features = ["derive"] }
+axum = { version = "0.8.9", features = ["macros", "multipart"] }
+mime = "0.3"
+uuid = { version = "1.8.0", features = ["v4"] }
+image = { version = "0.25", features = ["jpeg", "png", "gif", "webp"], optional = true }
+
+[features]
+default = ["thumbnail"]
+thumbnail = ["image"]

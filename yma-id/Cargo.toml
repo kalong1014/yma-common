@@ -1,0 +1,16 @@
+[package]
+name = "yma-id"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "分布式ID生成器，支持UUID v4/v7和Snowflake算法"
+
+[dependencies]
+uuid = { version = "1.8.0", features = ["v4", "serde"] }
+rand = "0.8.5"
+
+[features]
+default = ["v4"]
+v4 = []
+v7 = ["uuid/v7"]
+snowflake = []

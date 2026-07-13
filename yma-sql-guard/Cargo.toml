@@ -1,0 +1,12 @@
+[package]
+name = "yma-sql-guard"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "SQL注入防护模块，基于正则规则检测UNION SELECT/注释注入/盲注/逻辑绕过"
+
+[dependencies]
+axum = { version = "0.8.9", features = ["macros"] }
+serde_json = "1.0"
+regex = "1.11"
+tokio = { version = "1.52.1", features = ["rt-multi-thread"] }

@@ -4,8 +4,6 @@
 //! 版本锁定: 0.2.0
 
 use std::sync::Arc;
-use parking_lot::RwLock;
-use std::collections::HashMap;
 use async_trait::async_trait;
 use std::path::{Path, PathBuf};
 use std::fs;
@@ -41,20 +39,23 @@ pub trait StorageBackend: Send + Sync {
     async fn list_keys(&self, prefix: &str) -> Result<Vec<String>, StorageError>;
 }
 
-// ============ 内存存储后端 ============
+// ============ 内存存储后端（仅用于测试） ============
 
+#[cfg(test)]
 pub struct MemoryStorage {
-    data: Arc<RwLock<HashMap<String, Vec<u8>>>>,
+    data: Arc<parking_lot::RwLock<std::collections::HashMap<String, Vec<u8>>>>,
 }
 
+#[cfg(test)]
 impl MemoryStorage {
     pub fn new() -> Self {
         Self {
-            data: Arc::new(RwLock::new(HashMap::new())),
+            data: Arc::new(parking_lot::RwLock::new(std::collections::HashMap::new())),
         }
     }
 }
 
+#[cfg(test)]
 impl Default for MemoryStorage {
     fn default() -> Self {
         Self::new()
@@ -62,6 +63,7 @@ impl Default for MemoryStorage {
 }
 
 #[async_trait]
+#[cfg(test)]
 impl StorageBackend for MemoryStorage {
     async fn get(&self, key: &str) -> Result<Option<Vec<u8>>, StorageError> {
         Ok(self.data.read().get(key).cloned())
@@ -108,7 +110,7 @@ impl FileSystemStorage {
 
     fn key_to_path(&self, key: &str) -> PathBuf {
         // 将 key 中的特殊字符替换为安全的路径
-        let safe_key = key.replace('/', "_").replace('\\', "_");
+        let safe_key = key.replace(['/', '\\'], "_");
         self.base_path.join(&safe_key)
     }
 }
@@ -180,7 +182,8 @@ impl StorageManager {
         Self { backend }
     }
 
-    /// 创建内存存储
+    /// 创建内存存储（仅用于测试）
+    #[cfg(test)]
     pub fn memory() -> Self {
         Self::new(Arc::new(MemoryStorage::new()))
     }

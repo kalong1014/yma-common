@@ -172,11 +172,13 @@ impl Default for MemoryPersistence {
     }
 }
 
+type HandlerRegistry = std::sync::Arc<tokio::sync::RwLock<HashMap<String, Vec<std::sync::Arc<dyn EventHandler>>>>>;
+
 /// 事件总线
 pub struct EventBus {
     tx: broadcast::Sender<Event>,
     persistence: Option<std::sync::Arc<dyn EventPersistence>>,
-    handlers: std::sync::Arc<tokio::sync::RwLock<HashMap<String, Vec<std::sync::Arc<dyn EventHandler>>>>>,
+    handlers: HandlerRegistry,
 }
 
 impl EventBus {

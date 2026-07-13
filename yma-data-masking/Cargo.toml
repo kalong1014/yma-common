@@ -1,0 +1,6 @@
+[package]
+name = "yma-data-masking"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "敏感数据脱敏模块，支持手机号/邮箱/身份证/银行卡/姓名/IP/通用字符串脱敏"

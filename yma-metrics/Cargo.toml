@@ -1,0 +1,13 @@
+[package]
+name = "yma-metrics"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "Prometheus指标基础设施，提供计数器、直方图、仪表盘封装及HTTP导出端点"
+
+[dependencies]
+prometheus = "0.13"
+tokio = { version = "1.52.1", features = ["rt-multi-thread"] }
+axum = { version = "0.8.9", features = ["macros"] }
+serde = { version = "1.0", features = ["derive"] }
+once_cell = "1.19"

@@ -1,0 +1,11 @@
+[package]
+name = "yma-email"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "邮件发送服务，基于lettre提供SMTP邮件发送、批量发送功能"
+
+[dependencies]
+lettre = { version = "0.11.22", default-features = false, features = ["tokio1", "tokio1-rustls-tls", "smtp-transport", "builder", "rustls-tls"] }
+tokio = { version = "1.52.1", features = ["rt-multi-thread"] }
+serde = { version = "1.0", features = ["derive"] }

@@ -1,0 +1,16 @@
+[package]
+name = "yma-scheduler"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "定时任务调度器，支持cron表达式、一次性任务、cron任务和固定间隔任务"
+
+[dependencies]
+tokio = { version = "1.52.1", features = ["rt-multi-thread", "sync", "time", "macros"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+chrono = { version = "0.4.38", features = ["serde"] }
+tokio-cron-scheduler = "0.14"
+dashmap = "6"
+uuid = { version = "1.8.0", features = ["v4"] }
+tracing = "0.1.41"

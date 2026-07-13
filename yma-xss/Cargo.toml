@@ -1,0 +1,17 @@
+[package]
+name = "yma-xss"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "XSS防护模块，提供HTML转义、纯文本净化、富文本净化和JSON body过滤"
+
+[dependencies]
+ammonia = "4.1"
+html-escape = "0.2"
+regex = "1.11"
+serde_json = "1.0"
+axum = { version = "0.8.9", features = ["macros"], optional = true }
+
+[features]
+default = []
+axum-middleware = ["axum"]

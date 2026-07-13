@@ -1,0 +1,13 @@
+[package]
+name = "yma-search-client"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "Meilisearch搜索客户端封装，提供索引管理、文档搜索、分页查询"
+
+[dependencies]
+tokio = { version = "1.52.1", features = ["rt-multi-thread"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+meilisearch-sdk = "0.24"
+yma-pagination = { path = "../yma-pagination" }

@@ -1,0 +1,17 @@
+[package]
+name = "yma-csrf"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "CSRF防护中间件，提供Token生成/验证和Axum中间件集成"
+
+[dependencies]
+yma-crypto = { path = "../yma-crypto" }
+axum = { version = "0.8.9", features = ["macros"] }
+tokio = { version = "1.52.1", features = ["rt-multi-thread", "sync"] }
+rand = "0.8.5"
+base64 = "0.21"
+sha2 = "0.10"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+dashmap = "6"

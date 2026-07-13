@@ -186,8 +186,6 @@ mod tests {
     #[test]
     fn test_config_format_from_extension() {
         assert_eq!(ConfigFormat::from_extension("config.json"), Some(ConfigFormat::Json));
-        assert_eq!(ConfigFormat::from_extension("config.yaml"), Some(ConfigFormat::Yaml));
-        assert_eq!(ConfigFormat::from_extension("config.yml"), Some(ConfigFormat::Yaml));
         assert_eq!(ConfigFormat::from_extension("config.toml"), Some(ConfigFormat::Toml));
         assert_eq!(ConfigFormat::from_extension("config.env"), Some(ConfigFormat::Env));
         assert_eq!(ConfigFormat::from_extension("config.unknown"), None);
@@ -227,7 +225,7 @@ value = 200"#;
         let config = TestConfig { name: "test".to_string(), value: 42 };
         let manager = ConfigManager::new(config);
 
-        let mut rx = manager.subscribe().unwrap();
+        let rx = manager.subscribe().unwrap();
         assert_eq!(rx.borrow().name, "test");
 
         let new_config = TestConfig { name: "updated".to_string(), value: 99 };

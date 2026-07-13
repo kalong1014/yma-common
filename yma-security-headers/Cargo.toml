@@ -1,0 +1,12 @@
+[package]
+name = "yma-security-headers"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "安全响应头模块，管理CSP/HSTS/X-Frame-Options等11个安全响应头"
+
+[dependencies]
+axum = { version = "0.8.9", features = ["macros"] }
+tokio = "1.52.1"
+serde = { version = "1.0", features = ["derive"] }
+tower = "0.5"

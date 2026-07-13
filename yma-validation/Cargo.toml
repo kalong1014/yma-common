@@ -1,0 +1,14 @@
+[package]
+name = "yma-validation"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "通用验证器，提供邮箱/URL/用户名/密码/手机号/身份证/IP/域名/文件名等验证功能"
+
+[dependencies]
+regex = "1.11"
+serde = { version = "1.0", features = ["derive"] }
+
+[features]
+default = ["chinese"]
+chinese = []

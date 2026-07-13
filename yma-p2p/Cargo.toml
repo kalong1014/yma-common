@@ -1,0 +1,13 @@
+[package]
+name = "yma-p2p"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "P2P网络通信模块，提供节点消息传递与广播能力"
+
+[dependencies]
+tokio = { version = "1.52.1", features = ["rt-multi-thread", "sync", "macros"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+uuid = { version = "1.8.0", features = ["v4"] }
+chrono = { version = "0.4.38", features = ["serde"] }

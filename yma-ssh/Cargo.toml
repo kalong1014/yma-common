@@ -1,0 +1,18 @@
+[package]
+name = "yma-ssh"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "SSH客户端模块，基于russh提供远程命令执行与文件传输能力"
+
+[dependencies]
+russh = { version = "0.48" }
+russh-keys = "0.48"
+tokio = { version = "1.52.1", features = ["rt-multi-thread", "sync", "net", "macros"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+async-trait = "0.1"
+uuid = { version = "1.8.0", features = ["v4"] }
+thiserror = "1.0"
+anyhow = "1.0"
+ssh-key = "0.6"

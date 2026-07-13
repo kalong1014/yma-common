@@ -1,0 +1,10 @@
+[package]
+name = "yma-pagination"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "分页工具，提供分页参数解析、偏移量/限制计算和PaginationInfo转换"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+yma-api-response = { path = "../yma-api-response" }

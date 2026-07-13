@@ -1,0 +1,19 @@
+[package]
+name = "yma-audit"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "审计日志模块，记录Create/Update/Delete/Login等操作并支持查询"
+
+[dependencies]
+yma-pagination = { path = "../yma-pagination" }
+chrono = { version = "0.4.38", features = ["serde"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+sqlx = { workspace = true }
+uuid = { version = "1.8.0", features = ["v4"] }
+tokio = { version = "1.52.1", features = ["rt-multi-thread", "sync"] }
+
+[features]
+default = ["db"]
+db = []

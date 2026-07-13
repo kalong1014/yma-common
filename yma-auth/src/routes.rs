@@ -31,6 +31,7 @@ pub struct LoginRequest {
 #[derive(Debug, Serialize)]
 pub struct LoginResponse {
     pub token: String,
+    pub token_type: String,
     pub refresh_token: String,
     pub expires_in: u64,
     pub user_id: Uuid,
@@ -148,6 +149,7 @@ pub async fn login_handler(
         Ok(token_pair) => {
             let response = LoginResponse {
                 token: token_pair.access_token,
+                token_type: "Bearer".to_string(),
                 refresh_token: token_pair.refresh_token,
                 expires_in: state.jwt_service.access_token_ttl_seconds(),
                 user_id: user.id,
@@ -158,7 +160,7 @@ pub async fn login_handler(
         }
         Err(e) => (
             StatusCode::INTERNAL_SERVER_ERROR,
-            Json(json!({"error": e})),
+            Json(json!({"error": e.to_string()})),
         )
             .into_response(),
     }
@@ -179,7 +181,7 @@ pub async fn refresh_handler(
         }
         Err(e) => (
             StatusCode::UNAUTHORIZED,
-            Json(json!({"error": e})),
+            Json(json!({"error": e.to_string()})),
         )
             .into_response(),
     }
@@ -189,10 +191,27 @@ pub async fn refresh_handler(
 mod tests {
     use super::*;
 
+    const TEST_SECRET: &[u8] = b"this_is_a_very_long_test_secret_for_jwt_service_32_bytes";
+
     #[test]
     fn test_auth_routes_state() {
-        let jwt = JwtService::new(b"test_secret");
+        let jwt = JwtService::new(TEST_SECRET).unwrap();
         let state = AuthRoutesState::new(jwt);
         assert_eq!(state.user_store.read().get_all_users().len(), 0);
+    }
+
+    #[test]
+    fn test_login_response_has_token_type_bearer() {
+        let response = LoginResponse {
+            token: "access_token".to_string(),
+            token_type: "Bearer".to_string(),
+            refresh_token: "refresh_token".to_string(),
+            expires_in: 86400,
+            user_id: Uuid::new_v4(),
+            username: "test".to_string(),
+            role: "user".to_string(),
+        };
+        let json = serde_json::to_value(&response).unwrap();
+        assert_eq!(json["token_type"], "Bearer");
     }
 }

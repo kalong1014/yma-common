@@ -25,6 +25,8 @@ pub enum AuthError {
     InvalidToken,
     #[error("权限不足")]
     InsufficientPermission,
+    #[error("JWT Secret 长度不足: {0}")]
+    InvalidJwtSecret(String),
     #[error("内部错误: {0}")]
     InternalError(String),
 }
@@ -39,13 +41,16 @@ pub struct AuthService {
 
 impl AuthService {
     /// 创建认证服务（自动初始化各存储）
-    pub fn new(jwt_secret: String, access_ttl_minutes: i64, refresh_ttl_days: i64) -> Self {
-        Self {
+    pub fn new(jwt_secret: String, access_ttl_minutes: i64, refresh_ttl_days: i64) -> Result<Self, AuthError> {
+        let jwt_service = JwtService::new(jwt_secret.as_bytes())
+            .map_err(|e| AuthError::InvalidJwtSecret(e.to_string()))?
+            .with_ttl(access_ttl_minutes, refresh_ttl_days);
+        Ok(Self {
             user_store: Arc::new(RwLock::new(UserStore::new())),
             role_store: Arc::new(RwLock::new(RoleStore::new())),
             permission_store: Arc::new(RwLock::new(PermissionStore::new())),
-            jwt_service: JwtService::new(jwt_secret.as_bytes()).with_ttl(access_ttl_minutes, refresh_ttl_days),
-        }
+            jwt_service,
+        })
     }
 
     // ---------- 认证流程 ----------
@@ -258,16 +263,18 @@ impl AuthService {
 mod tests {
     use super::*;
 
+    const TEST_SECRET: &str = "this_is_a_very_long_test_secret_for_jwt_service_32_bytes";
+
     #[test]
     fn test_auth_service_new() {
-        let service = AuthService::new("test_secret".to_string(), 15, 7);
+        let service = AuthService::new(TEST_SECRET.to_string(), 15, 7).unwrap();
         assert_eq!(service.user_store.read().get_all_users().len(), 0);
         assert_eq!(service.role_store.read().get_all_roles().len(), 10); // 系统角色
     }
 
     #[test]
     fn test_auth_service_user_crud() {
-        let service = AuthService::new("test_secret".to_string(), 15, 7);
+        let service = AuthService::new(TEST_SECRET.to_string(), 15, 7).unwrap();
 
         let user_id = service
             .add_user("alice".to_string(), "alice@example.com".to_string(), "password123".to_string())
@@ -286,7 +293,7 @@ mod tests {
 
     #[test]
     fn test_auth_service_permission() {
-        let service = AuthService::new("test_secret".to_string(), 15, 7);
+        let service = AuthService::new(TEST_SECRET.to_string(), 15, 7).unwrap();
 
         let perm_id = service
             .add_permission("测试权限".to_string(), "测试".to_string(), "test:perm".to_string())
@@ -300,5 +307,11 @@ mod tests {
 
         let role = service.get_role_info(&role_id).unwrap();
         assert!(role.has_permission(&perm_id));
+    }
+
+    #[test]
+    fn test_auth_service_invalid_jwt_secret() {
+        let result = AuthService::new("short_secret".to_string(), 15, 7);
+        assert!(matches!(result, Err(AuthError::InvalidJwtSecret(_))));
     }
 }

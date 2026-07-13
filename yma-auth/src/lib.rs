@@ -26,7 +26,7 @@ pub mod middleware;
 #[cfg(feature = "web")]
 pub mod routes;
 
-pub use jwt::JwtService;
+pub use jwt::{JwtError, JwtService};
 pub use rbac::RbacEngine;
 pub use password::{PasswordHasher, hash_password, verify_password};
 pub use totp::TotpService;
